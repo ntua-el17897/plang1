@@ -1,0 +1,5 @@
+parent(kim, holly).
+parent(margaret, kim).
+parent(margaret, kent).
+parent(herbert, margaret).
+parent(herbert, jeam).
