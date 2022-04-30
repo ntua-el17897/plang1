@@ -3,11 +3,10 @@ fact(0,1):-true.
 /*First test. Είναι λάθος*/
 /*Λείπει το statement για αρνητικά Ν*/
 fact(N,F):-
-    N > 0,
     N1 is N - 1,
     fact(N1,F1),
     F is F1 * N,
-    true.
+    !.
 
 
 /*zebra Problem*/
@@ -40,3 +39,12 @@ rightof(L,R,[_,_,_,L,R]).
 
 nextto(H1, H2, Houses):- rightof(H1, H2, Houses).
 nextto(H1, H2, Houses):- rightof(H2, H1, Houses).
+
+
+
+
+
+tsbs_generate_data --use-case="iot" --seed=123 --scale=4000 \
+    --timestamp-start="2016-01-01T00:00:00Z" \
+    --timestamp-end="2016-01-02T00:00:00Z" \
+    --log-interval="60s" --format="timescaledb" \
