@@ -31,16 +31,20 @@ double log(double y) {
 
 
 int main (int argc, char** argv){
-    ios_base::sync_with_stdio(false);
+    // ios_base::sync_with_stdio(false);
 
     double ratios[26] = {0.08167, 0.01492, 0.02782, 0.04253, 0.12702, 0.02228, 0.02015, 0.06094, 0.06966, 0.00153, 0.00772, 0.04025, 0.02406, 0.06749, 0.07507, 0.01929, 0.00095, 0.05987, 0.06327, 0.09056, 0.02758, 0.00978, 0.02360, 0.00150, 0.01974, 0.00074};
 
+    double logratios[26];
+
+    int charInput = 0;
     int appearances[26];
     double frequencies[26];
     // double possibleSummations[26];
 
     for(int i=0; i<26; i++){
         appearances[i]=0;
+        logratios[i]=log(ratios[i]);
     }
     // printf("J+13 = %c\n", 'J'+13);
     // printf("'S'-'L' = %d\n", 'S'-'L');
@@ -52,6 +56,7 @@ int main (int argc, char** argv){
     int length = fileName.tellg();
     fileName.seekg(0, fileName.beg);
 
+    
     char *input = new char [length];
     fileName.read(input,length);
 
@@ -60,16 +65,21 @@ int main (int argc, char** argv){
     for(int i=0; i <length; i++){
         if(input[i]>='A'&&input[i]<='Z'){
             appearances[input[i]-'A']++;
+            charInput++;
         }
         if(input[i]>='a'&&input[i]<='z'){
             appearances[input[i]-'a']++;
+            charInput++;
         }
     }
+
     for(int i=0; i<26; i++){
         if(appearances[i]!=0){
-            frequencies[i]=log(appearances[i]/26.0);
+            frequencies[i]=appearances[i]/((double)charInput);
         }
-        // else frequencies[i] = 1;
+        else{
+            frequencies[i]=0;
+        }
         // printf("frequencies[%d] = %f\n", i, frequencies[i]);
         // printf("appearances[%d] = %d\n", i, appearances[i]);
     }
@@ -77,29 +87,29 @@ int main (int argc, char** argv){
     double min = 0;
     int offset = 0;
     for(int i=0; i<26; i++){
-        min = min -frequencies[i]*ratios[i];
+        min = min -frequencies[i]*logratios[i];
     }
     // printf("min %f\n", min);
 
     double curr;
-    for(int i=1; i<26; i++){
+    for(int n=1; n<26; n++){
         curr = 0;
         for(int j=0; j<26; j++){
-            // printf("i+j = %d+%d = %d\n",i,j,(i+j)%26 );
-            curr = curr -frequencies[(i+j)%26]*ratios[j];
+            // printf("n+j = %d+%d = %d\n",n,j,(n+j)%26 );
+            curr = curr -frequencies[(n+j)%26]*ratios[j];
         }
-        // printf("curr[%d]=%f\n", i, curr);
-        if(curr<min){
+        // printf("curr[%d]=%f\n", n, curr);
+        if(curr<=min){
             min = curr;
-            offset = i; 
+            offset = n; 
         }
     }
     // printf("offset = %d\n", offset);
 
-    if(length==3){offset=19;}
-    if(length==61){offset=13;}
+    // if(length==3){offset=19;}
+    // if(length==61){offset=13;}
 
-    short int c;
+    int c;
     // offset += 5;
     // offset++;
     // offset--;
@@ -115,12 +125,13 @@ int main (int argc, char** argv){
             // c = c%26;
             // c = c+'A';
 
-            c = ((int)input[i]-'A'-offset)%26;
+            c = (int)input[i]-'A'-offset;
             if(c<0) c+=26;
             c += 'A';
-            putchar(c);
+            // putchar(c);
+            printf("%c", c);
 
-            // printf("%d|",c);
+            // printf("%3d|",c);
             // printf("%c|",(char)c);
             // printf("%c|",input[i]);
             // printf("%d|",input[i]);
@@ -137,12 +148,13 @@ int main (int argc, char** argv){
             // c = c%26;
             // c = c+'a';
 
-            c = ((int)input[i]-'a'-offset)%26;
+            c = ((int)input[i]-'a'-offset);
             if(c<0) c+=26;
             c += 'a';
-            putchar(c);
+            // putchar(c);  
+            printf("%c", c);
 
-            // printf("%d|",c);
+            // printf("%3d|",c);
             // printf("%c|",(char)c);
             // printf("%c|",input[i]);
             // printf("%d|",input[i]);
@@ -150,7 +162,8 @@ int main (int argc, char** argv){
         }
         else{
 
-            putchar(input[i]);
+            // putchar(input[i]);
+            printf("%c", input[i]);
             
 
             // printf("%c",input[i]);
