@@ -45,6 +45,7 @@ int main (int argc, char** argv){
     for(int i=0; i<26; i++){
         appearances[i]=0;
         logratios[i]=log(ratios[i]);
+        // printf("%f, ", logratios[i]);
     }
     // printf("J+13 = %c\n", 'J'+13);
     // printf("'S'-'L' = %d\n", 'S'-'L');
@@ -89,14 +90,14 @@ int main (int argc, char** argv){
     for(int i=0; i<26; i++){
         min = min -frequencies[i]*logratios[i];
     }
-    // printf("min %f\n", min);
+    // printf("min %f\n", main);
 
     double curr;
     for(int n=1; n<26; n++){
         curr = 0;
         for(int j=0; j<26; j++){
             // printf("n+j = %d+%d = %d\n",n,j,(n+j)%26 );
-            curr = curr -frequencies[(n+j)%26]*ratios[j];
+            curr = curr -frequencies[(n+j)%26]*logratios[j];
         }
         // printf("curr[%d]=%f\n", n, curr);
         if(curr<=min){
