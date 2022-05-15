@@ -1,7 +1,10 @@
-(*val ratios = [0.08167, 0.01492, 0.02782, 0.04253, 0.12702, 0.02228, 0.02015, 0.06094, 0.06966, 0.00153, 0.00772, 0.04025, 0.02406, 0.06749, 0.07507, 0.01929, 0.00095, 0.05987, 0.06327, 0.09056, 0.02758, 0.00978, 0.02360, 0.00150, 0.01974, 0.00074];
-*)
+
+
+
 val logVersion = [~1.520950, ~1.700027, ~1.664436, ~1.624433, ~1.406259, ~1.679662, ~1.685540, ~1.575228, ~1.552252, ~1.737481, ~1.720102, ~1.630593, ~1.674760, ~1.557950, ~1.538103, ~1.687917, ~1.739115, ~1.578062, ~1.569068, ~1.498033, ~1.665094, ~1.714343, ~1.676026, ~1.737565, ~1.686673, ~1.739707]
 
+(*val ratios = [0.08167, 0.01492, 0.02782, 0.04253, 0.12702, 0.02228, 0.02015, 0.06094, 0.06966, 0.00153, 0.00772, 0.04025, 0.02406, 0.06749, 0.07507, 0.01929, 0.00095, 0.05987, 0.06327, 0.09056, 0.02758, 0.00978, 0.02360, 0.00150, 0.01974, 0.00074];
+*)
 
 (*fun test x:real = (hd ratios) + x;*)
 
@@ -11,7 +14,7 @@ val logVersion = [~1.520950, ~1.700027, ~1.664436, ~1.624433, ~1.406259, ~1.6796
 (*fun checkIfLetter (c:char, n) = true;*)
 fun checkIfLetter (c:char, n:int) = 
 	let 
-		val inputChar = ord c 
+		(*val inputChar = ord c *)
 		val testCharLower = chr (ord #"a" + n)
 		val testCharUpper = chr (ord #"A" + n)
 	in	
@@ -37,14 +40,19 @@ fun textRatios([], n) = []
 	| textRatios(x::xs, n) = 
 	(real(x)/real(n))::textRatios(xs, n);
 
-fun convolution([], [], _) = 0.0
-	| convolution(x::xs, y::ys, n) =
-	if n = 0 then 0.0
-	else ~(x*y)+convolution(xs, ys, n-1);
+fun convolution(_, _, 0) = 0.0
+	| convolution([], _, _) = 0.0
+	| convolution(x::xs, l2, n) =
+	(*if n = 0 then 0.0*)
+	let 
+		val y::ys = l2
+	in 
+		~(x*y)+convolution(xs, ys, n-1)
+	end;
 
-fun startAt(x::xs, n): real list= 
-	if n = 0 then x::xs
-	else startAt(xs, n-1);
+fun startAt(l, n): real list= 
+	if n = 0 then l
+	else startAt(tl l, n-1);
 
 fun minimum(x, y):real =
 	if x > y then y
@@ -106,25 +114,6 @@ fun decrypting([], _) = []
 	| decrypting (x::xs, offset) = 
 	trueValue(x, offset)::decrypting(xs, offset);
 
-fun decrypt(fileName) = 
-	let 
-		val infile = TextIO.openIn(fileName);
-		val allFile = TextIO.inputAll infile;
-		val test = explode(allFile);
-		val testImplode = String.implode test;
-		val testEveryLetter = everyLetter(test, 0);
-		val testSumEveryLetter = sumEveryLetter(testEveryLetter);
-		val testTextRatios = textRatios(testEveryLetter, testSumEveryLetter);
-		val listOfConv = createMinimumConv(logVersion, testTextRatios, 0);
-		val smallestInRatios = minInList(listOfConv);
-		val something_weird = 0; 
-		val positionOfSmallest = positionInList(listOfConv, smallestInRatios, 0);
-		val answerExploded = decrypting(test, positionOfSmallest);
-		val answerImploded = implode(answerExploded);
-	in 
-		print(answerImploded)
-	end;
-
 (*Testing metablhtes*)
 (*val convTest = convolution(logVersion, testTextRatios, 25);*)
 
@@ -143,4 +132,23 @@ val smallestInRatios = minInList(listOfConv);
 val something_weird = 0; 
 val positionOfSmallest = positionInList(listOfConv, smallestInRatios, 0);
 val answerExploded = decrypting(test, positionOfSmallest);
-val answerImploded = implode(answerExploded);*)
+val answerImploded = implode(answerExploded); *)
+
+fun decrypt(fileName) = 
+	let 
+		val infile = TextIO.openIn(fileName);
+		val allFile = TextIO.inputAll infile;
+		val test = explode(allFile);
+		val testImplode = String.implode test;
+		val testEveryLetter = everyLetter(test, 0);
+		val testSumEveryLetter = sumEveryLetter(testEveryLetter);
+		val testTextRatios = textRatios(testEveryLetter, testSumEveryLetter);
+		val listOfConv = createMinimumConv(logVersion, testTextRatios, 0);
+		val smallestInRatios = minInList(listOfConv);
+		val something_weird = 0; 
+		val positionOfSmallest = positionInList(listOfConv, smallestInRatios, 0);
+		val answerExploded = decrypting(test, positionOfSmallest);
+		val answerImploded = implode(answerExploded);
+	in 
+		print(answerImploded)
+	end;
