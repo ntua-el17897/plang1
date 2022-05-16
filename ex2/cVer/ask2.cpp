@@ -14,6 +14,7 @@ private:
 	vector<pair<int, edge> > T;  // mst
 	int *parent;
 	int V;  // number of vertices/nodes in graph
+	int max = 0;
 public:
 	Graph(int V);
 	void AddWeightedEdge(int u, int v, int w);
@@ -60,6 +61,7 @@ void Graph::kruskal() {
 		uRep = find_set(G[i].second.first);
 		vRep = find_set(G[i].second.second);
 		if (uRep != vRep) {
+			if (max < G[i].first) max = G[i].first;
 			T.push_back(G[i]);  // add to tree
 			union_set(uRep, vRep);
 		}
@@ -79,13 +81,13 @@ void Graph::print() {
 void Graph::printResult() {
 	// cout << "Edge :"
 	// 	 << " Weight" << endl;
-	int max = T[0].first;
-	for (long unsigned int i = 0; i < T.size(); i++) {
-		// cout << T[i].second.first << " - " << T[i].second.second << " : "
-		// 	 << T[i].first;
-		// cout << endl;
-		if (max < T[i].first) max = T[i].first;
-	}
+	// int max = T[0].first;
+	// for (long unsigned int i = 0; i < T.size(); i++) {
+	// 	// cout << T[i].second.first << " - " << T[i].second.second << " : "
+	// 	// 	 << T[i].first;
+	// 	// cout << endl;
+	// 	if (max < T[i].first) max = T[i].first;
+	// }
 	printf("%d", max);
 }
 

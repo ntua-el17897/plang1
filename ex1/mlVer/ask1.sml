@@ -12,7 +12,7 @@ val logVersion = [~1.520950, ~1.700027, ~1.664436, ~1.624433, ~1.406259, ~1.6796
 
 (*val logRatios = map log ratios;*)
 (*fun checkIfLetter (c:char, n) = true;*)
-fun checkIfLetter (c:char, n:int) = 
+fun checkIfLetter (c, n) = 
 	let 
 		(*val inputChar = ord c *)
 		val testCharLower = chr (ord #"a" + n)
@@ -22,8 +22,8 @@ fun checkIfLetter (c:char, n:int) =
 		else false
 	end;
 
-fun countLetters([], _:int) = 0
-	| countLetters (x::xs: char list, n: int) = 
+fun countLetters([], _) = 0
+	| countLetters (x::xs, n) = 
 
 	if checkIfLetter(x,n) then 1+countLetters(xs, n)
 	else countLetters(xs, n);
@@ -36,7 +36,7 @@ fun sumEveryLetter([]) = 0
 	| sumEveryLetter (x::xs) =
 	x+sumEveryLetter(xs); 
 
-fun textRatios([], n) = []
+fun textRatios([], _) = []
 	| textRatios(x::xs, n) = 
 	(real(x)/real(n))::textRatios(xs, n);
 
@@ -114,6 +114,10 @@ fun decrypting([], _) = []
 	| decrypting (x::xs, offset) = 
 	trueValue(x, offset)::decrypting(xs, offset);
 
+fun testInput(fileName) = 
+	if TextIO.endOfStream fileName then []
+	else TextIO.input1 fileName:: testInput(fileName);
+
 (*Testing metablhtes*)
 (*val convTest = convolution(logVersion, testTextRatios, 25);*)
 
@@ -137,9 +141,10 @@ val answerImploded = implode(answerExploded); *)
 fun decrypt(fileName) = 
 	let 
 		val infile = TextIO.openIn(fileName);
-		val allFile = TextIO.inputAll infile;
-		val test = explode(allFile);
-		val testImplode = String.implode test;
+		(*val allFile = TextIO.inputAll infile;*)
+		val test = explode(TextIO.inputAll infile);
+		val _ = TextIO.closeIn(infile);
+		(*val testImplode = String.implode test;*)
 		val testEveryLetter = everyLetter(test, 0);
 		val testSumEveryLetter = sumEveryLetter(testEveryLetter);
 		val testTextRatios = textRatios(testEveryLetter, testSumEveryLetter);
